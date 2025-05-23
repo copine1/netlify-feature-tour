@@ -1,0 +1,114 @@
+---
+import Layout from '../../components/layout.astro';
+---
+
+<Layout title="Web Editor" description="A simple web editor for creating and editing content.">
+  <div id="editor-container">
+    <div id="toolbar">
+      <button id="bold-btn">Bold</button>
+      <button id="italic-btn">Italic</button>
+      <button id="underline-btn">Underline</button>
+      <button id="insert-table-btn">Insert Table</button>
+      <button id="insert-image-btn">Insert Image</button>
+      <select id="font-family-select">
+        <option value="">Select Font</option>
+        <option value="Arial">Arial</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Georgia">Georgia</option>
+        <option value="Courier New">Courier New</option>
+      </select>
+      <input type="number" id="font-size-input" value="16" min="1">
+      <input type="color" id="font-color-input" value="#000000">
+    </div>
+    <div id="content-area" contenteditable="true">
+      <!-- Editable content will go here -->
+    </div>
+  </div>
+</Layout>
+
+<script>
+  document.getElementById('bold-btn').addEventListener('click', function() {
+    document.execCommand('bold', false, null);
+  });
+
+  document.getElementById('italic-btn').addEventListener('click', function() {
+    document.execCommand('italic', false, null);
+  });
+
+  document.getElementById('underline-btn').addEventListener('click', function() {
+    document.execCommand('underline', false, null);
+  });
+
+  document.getElementById('insert-table-btn').addEventListener('click', function() {
+    const rows = parseInt(prompt('Enter number of rows:'));
+    const cols = parseInt(prompt('Enter number of columns:'));
+
+    if (isNaN(rows) || isNaN(cols) || rows <= 0 || cols <= 0) {
+      alert('Please enter positive integers for rows and columns.');
+      return;
+    }
+
+    let tableHTML = '<table>';
+    for (let i = 0; i < rows; i++) {
+      tableHTML += '<tr>';
+      for (let j = 0; j < cols; j++) {
+        tableHTML += '<td>Cell</td>';
+      }
+      tableHTML += '</tr>';
+    }
+    tableHTML += '</table>';
+
+    // Ensure the content area has focus before inserting HTML
+    // This helps in scenarios where the user might have clicked outside
+    const contentArea = document.getElementById('content-area');
+    contentArea.focus();
+
+    document.execCommand('insertHTML', false, tableHTML);
+  });
+
+  document.getElementById('insert-image-btn').addEventListener('click', function() {
+    const imageUrl = prompt('Enter image URL:');
+
+    if (imageUrl) {
+      const imageHTML = `<img src="${imageUrl}" style="max-width: 100%; height: auto;">`;
+      
+      // Ensure the content area has focus before inserting HTML
+      const contentArea = document.getElementById('content-area');
+      contentArea.focus();
+      
+      document.execCommand('insertHTML', false, imageHTML);
+    }
+  });
+
+  document.getElementById('font-family-select').addEventListener('change', function() {
+    const selectedFont = this.value;
+    if (selectedFont) {
+      document.execCommand('fontName', false, selectedFont);
+    }
+  });
+
+  document.getElementById('font-size-input').addEventListener('change', function() {
+    const size = parseInt(this.value);
+    let mappedSize;
+    if (size <= 0) { // Ensure focus on content area even if no valid size
+        document.getElementById('content-area').focus();
+        return;
+    }
+    // Mapping: 8-10px -> 1, 11-13px -> 2, 14-16px -> 3, 17-19px -> 4, 20-23px -> 5, 24-28px -> 6, >28px -> 7
+    if (size <= 10) mappedSize = 1;
+    else if (size <= 13) mappedSize = 2;
+    else if (size <= 16) mappedSize = 3;
+    else if (size <= 19) mappedSize = 4;
+    else if (size <= 23) mappedSize = 5;
+    else if (size <= 28) mappedSize = 6;
+    else mappedSize = 7;
+    
+    document.execCommand('fontSize', false, mappedSize);
+  });
+
+  document.getElementById('font-color-input').addEventListener('input', function() { // 'input' event for live color change
+    const selectedColor = this.value;
+    document.execCommand('foreColor', false, selectedColor);
+  });
+</script>
