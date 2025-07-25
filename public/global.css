@@ -95,3 +95,58 @@
   --purple-900: #292142;
   --purple-000: #f5f2fc;
 }
+
+/* Style for the editor container */
+#editor-container {
+  border: 1px solid #ccc;
+  margin-top: 20px;
+  display: flex; /* Use flexbox to arrange toolbar and content area */
+  flex-direction: column; /* Stack them vertically */
+}
+
+/* Style for the toolbar */
+#toolbar {
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  display: flex; /* Use flexbox for toolbar items */
+  flex-wrap: wrap; /* Allow items to wrap to the next line */
+  gap: 5px; /* Add some space between toolbar items */
+}
+
+/* Style for toolbar buttons */
+#toolbar button {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  border-radius: 4px; /* Add rounded corners to buttons */
+}
+
+#toolbar button:hover {
+  background-color: #e0e0e0;
+}
+
+/* Style for toolbar input elements */
+#toolbar select,
+#toolbar input[type="number"],
+#toolbar input[type="color"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Style for the content area */
+#content-area {
+  padding: 15px;
+  min-height: 300px; /* Give some initial height */
+  outline: none; /* Remove the default focus outline */
+  border: none; /* Remove border if editor-container has one */
+  font-size: 16px; /* Default font size for content */
+  line-height: 1.6;
+}
+
+/* Add some margin to the body to avoid editor touching screen edges */
+body {
+  margin: 10px; /* Adjust as needed */
+}
